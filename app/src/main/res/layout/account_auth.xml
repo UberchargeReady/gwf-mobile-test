@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="username"
+        android:text="candidate@gwf-labs.gr"
         android:inputType="textPersonName"
         android:minHeight="48dp" />
 

@@ -4,11 +4,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-public class RefreshResponse extends Response {
+public class LoginResponse extends Response {
 
-    private String accessToken;
+    private String refreshToken, accessToken;
 
-    public RefreshResponse(String json) throws JSONException {
+    public LoginResponse(String json) throws JSONException {
         parseResponse(json);
     }
 
@@ -16,7 +16,12 @@ public class RefreshResponse extends Response {
     protected void parseResponse(String json) throws JSONException {
         Object obj = new JSONTokener(json).nextValue();
         JSONObject jsonObject = (JSONObject) obj;
+        refreshToken = jsonObject.getString("refresh");
         accessToken = jsonObject.getString("access");
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
     public String getAccessToken() {

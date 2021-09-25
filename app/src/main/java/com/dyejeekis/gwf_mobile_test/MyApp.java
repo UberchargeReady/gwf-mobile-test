@@ -5,16 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.dyejeekis.gwf_mobile_test.data.model.User;
+import com.dyejeekis.gwf_mobile_test.util.Util;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MyApp extends Application {
 
-    public static final String USER_FILE_KEY = "key.USER";
-    public static final String USERNAME_KEY = "key.USERNAME";
-    public static final String ACCESS_TOKEN_KEY = "key.ACCESS_TOKEN";
-    public static final String REFRESH_TOKEN_KEY = "key.REFRESH_TOKEN";
+    public static final String USER_FILE_NAME = "user";
 
     private static MyApp instance;
 
@@ -36,28 +36,21 @@ public class MyApp extends Application {
         return executorService;
     }
 
-    // TODO: 9/24/2021 token millis, logout user if refresh token expired
     public User getCurrentUser() {
         if (currentUser == null) {
-            SharedPreferences sharedPref = getSharedPreferences(USER_FILE_KEY, Context.MODE_PRIVATE);
-            String username = sharedPref.getString(USERNAME_KEY, null);
-            if (username == null) currentUser = new User();
-            else {
-                String accessToken = sharedPref.getString(ACCESS_TOKEN_KEY, null);
-                String refreshToken = sharedPref.getString(REFRESH_TOKEN_KEY, null);
-                currentUser = new User(username, accessToken, refreshToken);
+            try {
+                currentUser = (User) Util.readObjectFromFile(new File(getFilesDir(), USER_FILE_NAME));
+                if (!currentUser.isRefreshTokenValid())
+                    currentUser = new User();
+            } catch (IOException | ClassNotFoundException e) {
+                currentUser = new User();
             }
         }
         return currentUser;
     }
 
-    public void setCurrentUser(User currentUser) {
+    public void setCurrentUser(User currentUser) throws IOException {
         this.currentUser = currentUser;
-        SharedPreferences sharedPref = getSharedPreferences(USER_FILE_KEY, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(USERNAME_KEY, currentUser.getUsername());
-        editor.putString(ACCESS_TOKEN_KEY, currentUser.getAccessToken());
-        editor.putString(REFRESH_TOKEN_KEY, currentUser.getRefreshToken());
-        editor.apply();
+        Util.writeObjectToFile(currentUser, new File(getFilesDir(), USER_FILE_NAME));
     }
 }
