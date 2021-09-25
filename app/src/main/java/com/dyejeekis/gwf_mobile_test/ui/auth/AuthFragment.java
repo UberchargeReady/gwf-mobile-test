@@ -29,6 +29,9 @@ public class AuthFragment extends Fragment implements View.OnClickListener {
         authViewModel.getUserMutable().observe(getViewLifecycleOwner(), this::onUserUpdated);
 
         binding = FragmentAuthBinding.inflate(inflater, container, false);
+        binding.includedAccountAuth.buttonLogin.setOnClickListener(this);
+        binding.includedAccountInfo.buttonLogout.setOnClickListener(this);
+
         return binding.getRoot();
     }
 
@@ -44,11 +47,13 @@ public class AuthFragment extends Fragment implements View.OnClickListener {
             Util.hideKeyboard(getActivity());
             String username = binding.includedAccountAuth.editTextUsername.getText().toString();
             String password = binding.includedAccountAuth.editTextPassword.getText().toString();
+            binding.includedAccountAuth.buttonLogin.setEnabled(false);
             binding.includedAccountAuth.editTextUsername.setEnabled(false);
             binding.includedAccountAuth.editTextPassword.setEnabled(false);
 
             authViewModel.makeLoginRequest(username, password,
                     new AppApiCallback<>(getContext(), result -> {
+                        binding.includedAccountAuth.buttonLogin.setEnabled(true);
                         binding.includedAccountAuth.editTextUsername.setEnabled(true);
                         binding.includedAccountAuth.editTextPassword.setEnabled(true);
                         //binding.includedAccountAuth.editTextUsername.setText("");
