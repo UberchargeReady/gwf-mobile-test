@@ -14,11 +14,10 @@ public class TotalValuesViewHolder extends RecyclerView.ViewHolder {
         this.binding = binding;
     }
 
-    public TotalValuesViewBinding getBinding() {
-        return binding;
-    }
-
     public void bindItem(TotalValues totalValues) {
-        // TODO: 9/25/2021
+        binding.textViewMeters.setText("Meters: " + totalValues.getMeters());
+        binding.textViewVolume.setText("Volume: " + totalValues.getVolume());
+        binding.textViewErrors.setText("Errors: " + totalValues.getErrors());
+        binding.textViewReadouts.setText("Readouts: " + totalValues.getReadouts());
     }
 }

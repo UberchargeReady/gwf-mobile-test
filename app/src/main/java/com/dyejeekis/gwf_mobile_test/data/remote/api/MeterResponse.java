@@ -2,6 +2,7 @@ package com.dyejeekis.gwf_mobile_test.data.remote.api;
 
 import com.dyejeekis.gwf_mobile_test.data.model.Meter;
 import com.dyejeekis.gwf_mobile_test.data.model.MeterState;
+import com.dyejeekis.gwf_mobile_test.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,13 +27,16 @@ public class MeterResponse extends Response {
         for (int i=0; i<jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             Meter meter = new Meter(
-                    (float) jsonObject.getDouble("lat"),
-                    (float) jsonObject.getDouble("lng"),
-                    jsonObject.getString("mp_name"),
-                    jsonObject.getString("meter_id"),
-                    jsonObject.getString("meter_type"),
-                    jsonObject.getString("last_entry"),
-                    (float) jsonObject.getDouble("volume"),
+                    (float) Util.safeJsonToDouble(jsonObject, "lat"),
+                    (float) Util.safeJsonToDouble(jsonObject, "lng"),
+                    (float) Util.safeJsonToDouble(jsonObject, "volume"),
+                    Util.safeJsonToString(jsonObject, "mp_name"),
+                    Util.safeJsonToString(jsonObject, "meter_id"),
+                    Util.safeJsonToString(jsonObject, "meter_type"),
+                    Util.safeJsonToString(jsonObject, "last_entry"),
+                    Util.safeJsonToString(jsonObject, "comm_mod_type"),
+                    Util.safeJsonToString(jsonObject, "comm_mod_serial"),
+                    Util.safeJsonToInteger(jsonObject, "battery_lifetime"),
                     parseMeterState(jsonObject.getJSONObject("state")));
             meters.add(meter);
         }
@@ -40,15 +44,19 @@ public class MeterResponse extends Response {
 
     private MeterState parseMeterState(JSONObject jsonObject) throws JSONException {
         return new MeterState(
-                jsonObject.getBoolean("us_water_level"),
-                jsonObject.getBoolean("v_sensor_comm_timout"),
-                jsonObject.getBoolean("water_level_error"),
-                jsonObject.getBoolean("t_air_error"),
-                jsonObject.getBoolean("t_water_error"),
-                jsonObject.getBoolean("w_air_error"),
-                jsonObject.getBoolean("w_water_error"),
-                jsonObject.getBoolean("velocity_error"),
-                jsonObject.getBoolean("system_error"));
+                Util.safeJsonToBoolean(jsonObject, "us_water_level"),
+                Util.safeJsonToBoolean(jsonObject, "v_sensor_comm_timeout"),
+                Util.safeJsonToBoolean(jsonObject, "water_level_error"),
+                Util.safeJsonToBoolean(jsonObject, "t_air_error"),
+                Util.safeJsonToBoolean(jsonObject, "t_water_error"),
+                Util.safeJsonToBoolean(jsonObject, "w_air_error"),
+                Util.safeJsonToBoolean(jsonObject, "w_water_error"),
+                Util.safeJsonToBoolean(jsonObject, "velocity_error"),
+                Util.safeJsonToBoolean(jsonObject, "system_error"),
+                Util.safeJsonToBoolean(jsonObject, "battery_low"),
+                Util.safeJsonToBoolean(jsonObject, "communication_error"),
+                Util.safeJsonToBoolean(jsonObject, "parsing_error"),
+                Util.safeJsonToBoolean(jsonObject, "encoder_error"));
     }
 
     public List<Meter> getMeters() {

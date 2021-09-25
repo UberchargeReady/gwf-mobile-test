@@ -3,11 +3,13 @@ package com.dyejeekis.gwf_mobile_test.data.model;
 public class MeterState {
 
     private final boolean usWaterLevel, vSensorCommTimeout, waterLevelError, tAirError, tWaterError,
-    wAirError, wWaterError, velocityError, SystemError;
+    wAirError, wWaterError, velocityError, systemError, batteryLow, communicationError, parsingError,
+    encoderError;
 
     public MeterState(boolean usWaterLevel, boolean vSensorCommTimeout, boolean waterLevelError,
                       boolean tAirError, boolean tWaterError, boolean wAirError, boolean wWaterError,
-                      boolean velocityError, boolean systemError) {
+                      boolean velocityError, boolean systemError, boolean batteryLow,
+                      boolean communicationError, boolean parsingError, boolean encoderError) {
         this.usWaterLevel = usWaterLevel;
         this.vSensorCommTimeout = vSensorCommTimeout;
         this.waterLevelError = waterLevelError;
@@ -16,7 +18,27 @@ public class MeterState {
         this.wAirError = wAirError;
         this.wWaterError = wWaterError;
         this.velocityError = velocityError;
-        SystemError = systemError;
+        this.systemError = systemError;
+        this.batteryLow = batteryLow;
+        this.communicationError = communicationError;
+        this.parsingError = parsingError;
+        this.encoderError = encoderError;
+    }
+
+    public boolean isBatteryLow() {
+        return batteryLow;
+    }
+
+    public boolean isCommunicationError() {
+        return communicationError;
+    }
+
+    public boolean isParsingError() {
+        return parsingError;
+    }
+
+    public boolean isEncoderError() {
+        return encoderError;
     }
 
     public boolean isUsWaterLevel() {
@@ -52,6 +74,6 @@ public class MeterState {
     }
 
     public boolean isSystemError() {
-        return SystemError;
+        return systemError;
     }
 }

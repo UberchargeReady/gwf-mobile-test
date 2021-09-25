@@ -3,6 +3,7 @@ package com.dyejeekis.gwf_mobile_test.ui.meters;
 import androidx.lifecycle.MutableLiveData;
 
 import com.dyejeekis.gwf_mobile_test.data.model.Entity;
+import com.dyejeekis.gwf_mobile_test.data.model.TotalValues;
 import com.dyejeekis.gwf_mobile_test.data.remote.ApiHelper;
 import com.dyejeekis.gwf_mobile_test.data.remote.AppApiHelper;
 import com.dyejeekis.gwf_mobile_test.data.remote.Result;
@@ -32,17 +33,32 @@ public class MetersViewModel extends BaseViewModel {
 
     public void loadData() {
         if (getUser().isLoggedIn()) {
-            MeterRequest meterRequest = new MeterRequest();
-            TotalValuesRequest totalsRequest = new TotalValuesRequest();
             getExecutor().execute(() -> {
-                Result<MeterResponse> meterResult = apiHelper.getMeters(meterRequest);
-                Result<TotalValuesResponse> totalsResult = apiHelper.getTotalValues(totalsRequest);
-                if (meterResult instanceof Result.Success && totalsResult instanceof Result.Success) {
+                Result<MeterResponse> meterResult = apiHelper.getMeters(new MeterRequest());
+                if (meterResult instanceof Result.Success) {
                     List<Entity> items = new ArrayList<>();
+                    if (mutableLiveData.getValue() != null && mutableLiveData.getValue().size() >= 1
+                            && mutableLiveData.getValue().get(0) instanceof TotalValues) {
+                        items.add(mutableLiveData.getValue().get(0));
+                    }
                     items.addAll(((Result.Success<MeterResponse>) meterResult).data.getMeters());
-                    items.add(((Result.Success<TotalValuesResponse>) totalsResult).data.getTotalValues());
                     mutableLiveData.postValue(items);
                 } else mutableLiveData.postValue(null);
+            });
+            getExecutor().execute(() -> {
+                try {
+                    Thread.sleep(4000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Result<TotalValuesResponse> totalsResult = apiHelper.getTotalValues(new TotalValuesRequest());
+                if (totalsResult instanceof Result.Success) {
+                    List<Entity> items = new ArrayList<>();
+                    items.add(((Result.Success<TotalValuesResponse>) totalsResult).data.getTotalValues());
+                    if (mutableLiveData.getValue() != null)
+                        items.addAll(mutableLiveData.getValue());
+                    mutableLiveData.postValue(items);
+                }
             });
         } else throw new NetworkUtil.NotAuthenticatedException();
     }

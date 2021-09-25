@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -79,11 +80,11 @@ public class MetersFragment extends Fragment implements View.OnClickListener {
     }
 
     private void onMetersUpdated(List<Entity> data) {
-        if (data != null) {
+        if (data == null || data.isEmpty()) {
+            Util.displayShortToast(getContext(), "Error fetching data");
+        } else {
             MetersAdapter adapter = new MetersAdapter(data, this);
             binding.recyclerViewMeters.setAdapter(adapter);
-        } else {
-            Util.displayShortToast(getContext(), "Error fetching data");
         }
     }
 

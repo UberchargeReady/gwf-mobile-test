@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -52,5 +54,33 @@ public class Util {
         oos.writeObject(object);
         fos.close();
         oos.close();
+    }
+
+    public static String safeJsonToString(JSONObject jsonObject, String key) {
+        try {
+            return jsonObject.getString(key);
+        } catch (Exception e) {}
+        return null;
+    }
+
+    public static int safeJsonToInteger(JSONObject jsonObject, String key) {
+        try {
+            return jsonObject.getInt(key);
+        } catch (Exception e) {}
+        return -1;
+    }
+
+    public static double safeJsonToDouble(JSONObject jsonObject, String key) {
+        try {
+            return jsonObject.getDouble(key);
+        } catch (Exception e) {}
+        return -1;
+    }
+
+    public static boolean safeJsonToBoolean(JSONObject jsonObject, String key) {
+        try {
+            return jsonObject.getBoolean(key);
+        } catch (Exception e) {}
+        return false;
     }
 }

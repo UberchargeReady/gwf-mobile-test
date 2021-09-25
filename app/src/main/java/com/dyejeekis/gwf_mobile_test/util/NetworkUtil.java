@@ -3,6 +3,7 @@ package com.dyejeekis.gwf_mobile_test.util;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -17,6 +18,10 @@ public class NetworkUtil {
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(new LoggingInterceptor())
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(20, TimeUnit.SECONDS)
+            .callTimeout(20, TimeUnit.SECONDS)
             .build();
 
     public static String get(String url, String bearerToken) throws IOException {

@@ -1,6 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_meter"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(name)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(id)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(type)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_comm_mod_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(comm mod type)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_comm_mod_serial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(comm mod serial)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_lat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(lat)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_lng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(lng)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_volume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(volume)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_battery_lifetime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(battery lifetime)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_last_entry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(last entry)"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(state)"
+        android:textSize="16sp" />
+</LinearLayout>
