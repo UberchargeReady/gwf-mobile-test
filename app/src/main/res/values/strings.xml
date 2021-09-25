@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">gwf-mobile-test</string>
+    <string name="title_meters">Meters</string>
+    <string name="title_map">Map</string>
+    <string name="title_account">Account</string>
+    <string name="title_search_meter">Search meter</string>
+</resources>

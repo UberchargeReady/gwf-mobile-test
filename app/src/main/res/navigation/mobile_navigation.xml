@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_meters">
+
+    <fragment
+        android:id="@+id/navigation_meters"
+        android:name="com.dyejeekis.gwf_mobile_test.ui.meters.MetersFragment"
+        android:label="@string/title_meters"
+        tools:layout="@layout/fragment_meters" />
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.dyejeekis.gwf_mobile_test.ui.map.MapFragment"
+        android:label="@string/title_map"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.dyejeekis.gwf_mobile_test.ui.auth.AuthFragment"
+        android:label="@string/title_account"
+        tools:layout="@layout/fragment_auth" />
+</navigation>
