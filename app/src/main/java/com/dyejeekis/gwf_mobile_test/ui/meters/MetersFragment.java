@@ -10,10 +10,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.dyejeekis.gwf_mobile_test.MyApp;
 import com.dyejeekis.gwf_mobile_test.data.model.Entity;
 import com.dyejeekis.gwf_mobile_test.data.model.User;
+import com.dyejeekis.gwf_mobile_test.data.remote.AppApiCallback;
+import com.dyejeekis.gwf_mobile_test.data.remote.Result;
 import com.dyejeekis.gwf_mobile_test.databinding.FragmentMetersBinding;
 import com.dyejeekis.gwf_mobile_test.ui.auth.AuthViewModel;
+import com.dyejeekis.gwf_mobile_test.util.NetworkUtil;
 import com.dyejeekis.gwf_mobile_test.util.Util;
 
 import java.util.List;
@@ -41,11 +45,37 @@ public class MetersFragment extends Fragment implements View.OnClickListener {
             binding.textViewLogin.setVisibility(View.GONE);
             binding.recyclerViewMeters.setVisibility(View.VISIBLE);
 
-            metersViewModel.loadData();
+            refreshData(user);
         } else {
             binding.textViewLogin.setVisibility(View.VISIBLE);
             binding.recyclerViewMeters.setVisibility(View.GONE);
         }
+    }
+
+    private void refreshData(User user) {
+        if (user.isLoggedIn()) {
+            if (user.isAccessTokenValid()) {
+                metersViewModel.loadData();
+            } else {
+                try {
+                    authViewModel.makeRefreshRequest(new AppApiCallback<>(getContext(), result -> {
+                        if (result instanceof Result.Success) {
+                            metersViewModel.loadData();
+                        } else Util.displayShortToast(getContext(),
+                                "Failed to refresh access token");
+                    }));
+                } catch (NetworkUtil.RefreshTokenExpiredException e) {
+                    authViewModel.makeLogoutRequest(new AppApiCallback<>(getContext(), result -> {
+                        Util.displayShortToast(getContext(),
+                                "Refresh token expired - Please log in");
+                    }));
+                }
+            }
+        } else Util.displayShortToast(getContext(), "Please log in");
+    }
+
+    private void refreshData() {
+        refreshData(MyApp.getInstance().getCurrentUser());
     }
 
     private void onMetersUpdated(List<Entity> data) {
