@@ -41,4 +41,12 @@ public class NetworkUtil {
         //Log.d("OkHttp", "Response body: " + responseStr);
         return responseStr;
     }
+
+    public static class RefreshTokenExpiredException extends RuntimeException {
+
+    }
+
+    public static class NotAuthenticatedException extends RuntimeException {
+
+    }
 }

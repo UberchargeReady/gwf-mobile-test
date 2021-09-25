@@ -25,8 +25,7 @@ public class AuthFragment extends Fragment implements View.OnClickListener {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        authViewModel =
-                new ViewModelProvider(this).get(AuthViewModel.class);
+        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
         authViewModel.getUserMutable().observe(getViewLifecycleOwner(), this::onUserUpdated);
 
         binding = FragmentAuthBinding.inflate(inflater, container, false);
