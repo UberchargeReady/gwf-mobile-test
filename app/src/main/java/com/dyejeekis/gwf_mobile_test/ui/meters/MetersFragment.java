@@ -63,6 +63,9 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.swipeRefresh.setOnRefreshListener(this);
+        if (metersViewModel.getMutableLiveData().getValue() == null) {
+            refreshData();
+        }
     }
 
     private void onUserUpdated(User user) {
@@ -77,6 +80,7 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
 
     private void refreshData(User user) {
         if (user.isLoggedIn()) {
+            binding.swipeRefresh.setRefreshing(true);
             if (user.isAccessTokenValid()) {
                 metersViewModel.loadData(loadDataCb);
             } else {
@@ -139,7 +143,6 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
                 // TODO: 9/26/2021
                 return true;
             case R.id.action_refresh:
-                binding.swipeRefresh.setRefreshing(true);
                 refreshData();
                 return true;
         }
