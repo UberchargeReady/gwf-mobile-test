@@ -22,8 +22,8 @@ public class MeterViewHolder extends RecyclerView.ViewHolder {
         binding.textViewName.setText("Name: " + meter.getName());
         binding.textViewId.setText("ID: " + meter.getId());
         binding.textViewType.setText("Type: " + meter.getType());
-        String lat = meter.getLatitude() == -1 ? "null" : String.valueOf(meter.getLatitude());
-        String lng = meter.getLongitude() == -1 ? "null" : String.valueOf(meter.getLongitude());
+        String lat = meter.getLatitude() == 404 ? "null" : String.valueOf(meter.getLatitude());
+        String lng = meter.getLongitude() == 404 ? "null" : String.valueOf(meter.getLongitude());
         binding.textViewLat.setText("Latitude: " + lat);
         binding.textViewLng.setText("Longitude: " + lng);
         binding.textViewVolume.setText("Volume: " + meter.getVolume());

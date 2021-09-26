@@ -9,7 +9,11 @@
         android:id="@+id/navigation_meters"
         android:name="com.dyejeekis.gwf_mobile_test.ui.meters.MetersFragment"
         android:label="@string/title_meters"
-        tools:layout="@layout/fragment_meters" />
+        tools:layout="@layout/fragment_meters">
+        <action
+            android:id="@+id/action_meters_to_map"
+            app:destination="@id/navigation_map" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_map"
@@ -22,4 +26,5 @@
         android:name="com.dyejeekis.gwf_mobile_test.ui.auth.AuthFragment"
         android:label="@string/title_account"
         tools:layout="@layout/fragment_auth" />
+
 </navigation>

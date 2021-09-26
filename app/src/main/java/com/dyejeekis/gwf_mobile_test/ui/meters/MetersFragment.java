@@ -4,14 +4,19 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -37,6 +42,7 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
     private MetersViewModel metersViewModel;
     private FragmentMetersBinding binding;
     private ApiCallback<Response> loadDataCb;
+    private MetersAdapter adapter;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -86,11 +92,13 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
             } else {
                 try {
                     authViewModel.makeRefreshRequest(new AppApiCallback<>(getContext(), result -> {
-                        binding.swipeRefresh.setRefreshing(false);
                         if (result instanceof Result.Success) {
                             metersViewModel.loadData(loadDataCb);
-                        } else Util.displayShortToast(getContext(),
-                                "Failed to refresh access token");
+                        } else {
+                            binding.swipeRefresh.setRefreshing(false);
+                            Util.displayShortToast(getContext(),
+                                    "Failed to refresh access token");
+                        }
                     }));
                 } catch (NetworkUtil.RefreshTokenExpiredException e) {
                     authViewModel.makeLogoutRequest(new AppApiCallback<>(getContext(), result -> {
@@ -102,7 +110,7 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
             }
         } else {
             binding.swipeRefresh.setRefreshing(false);
-            Util.displayShortToast(getContext(), "Please log in");
+            //Util.displayShortToast(getContext(), "Please log in");
         }
     }
 
@@ -114,8 +122,27 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
         if (data == null || data.isEmpty()) {
             Util.displayShortToast(getContext(), "Error fetching data");
         } else {
-            MetersAdapter adapter = new MetersAdapter(data, this);
+            adapter = new MetersAdapter(data, this);
             binding.recyclerViewMeters.setAdapter(adapter);
+        }
+    }
+
+    private void findMeterById(String meterId) {
+        if (MyApp.getInstance().getCurrentUser().isLoggedIn() &&
+                adapter != null && adapter.getItems() != null) {
+            Util.hideKeyboard(getActivity());
+            int position = -1;
+            for (Entity item : adapter.getItems()) {
+                if (item instanceof Meter && ((Meter) item).getId().equalsIgnoreCase(meterId)) {
+                    position = adapter.getItems().indexOf(item);
+                    break;
+                }
+            }
+            if (position == -1) {
+                Util.displayShortToast(getContext(), "Meter not found");
+            } else {
+                binding.recyclerViewMeters.getLayoutManager().scrollToPosition(position);
+            }
         }
     }
 
@@ -127,8 +154,18 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
 
     @Override
     public View.OnClickListener onMeterClick(Meter meter) {
-        // TODO: 9/26/2021
-        return null;
+        return v -> {
+            if (meter.getLatitude() != 404 && meter.getLongitude() != 404) {
+                Bundle bundle = new Bundle();
+                bundle.putString("id", meter.getId());
+                bundle.putFloat("lat", meter.getLatitude());
+                bundle.putFloat("lng", meter.getLongitude());
+
+                NavController navController = Navigation.findNavController(getActivity(),
+                        R.id.nav_host_fragment_activity_main);
+                navController.navigate(R.id.action_meters_to_map, bundle);
+            } else Util.displayShortToast(getContext(), "Invalid coordinates");
+        };
     }
 
     @Override
@@ -137,11 +174,26 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search_meter).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                findMeterById(searchView.getQuery().toString());
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search_meter:
-                // TODO: 9/26/2021
-                return true;
             case R.id.action_refresh:
                 refreshData();
                 return true;

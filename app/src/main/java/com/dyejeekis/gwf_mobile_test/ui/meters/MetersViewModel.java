@@ -28,9 +28,9 @@ public class MetersViewModel extends BaseViewModel {
     public MutableLiveData<List<Entity>> getMutableLiveData() {
         if (mutableLiveData == null) {
             mutableLiveData = new MutableLiveData<>();
-            try {
-                loadData(null);
-            } catch (Exception e) {}
+            //try {
+            //    loadData(null);
+            //} catch (Exception e) {}
         }
         return mutableLiveData;
     }

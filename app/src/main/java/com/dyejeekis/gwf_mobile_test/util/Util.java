@@ -71,10 +71,14 @@ public class Util {
     }
 
     public static double safeJsonToDouble(JSONObject jsonObject, String key) {
+        return safeJsonToDouble(jsonObject, key, -1);
+    }
+
+    public static double safeJsonToDouble(JSONObject jsonObject, String key, double defaultValue) {
         try {
             return jsonObject.getDouble(key);
         } catch (Exception e) {}
-        return -1;
+        return defaultValue;
     }
 
     public static boolean safeJsonToBoolean(JSONObject jsonObject, String key) {

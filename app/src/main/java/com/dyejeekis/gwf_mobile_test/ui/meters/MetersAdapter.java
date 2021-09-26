@@ -27,6 +27,10 @@ public class MetersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.meterListener = meterListener;
     }
 
+    public List<Entity> getItems() {
+        return items;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

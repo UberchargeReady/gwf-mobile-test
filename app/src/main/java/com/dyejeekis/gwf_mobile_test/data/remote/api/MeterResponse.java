@@ -27,9 +27,9 @@ public class MeterResponse extends Response {
         for (int i=0; i<jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             Meter meter = new Meter(
-                    (float) Util.safeJsonToDouble(jsonObject, "lat"),
-                    (float) Util.safeJsonToDouble(jsonObject, "lng"),
-                    (float) Util.safeJsonToDouble(jsonObject, "volume"),
+                    (float) Util.safeJsonToDouble(jsonObject, "lat", 404),
+                    (float) Util.safeJsonToDouble(jsonObject, "lng", 404),
+                    (float) Util.safeJsonToDouble(jsonObject, "volume", 0),
                     Util.safeJsonToString(jsonObject, "mp_name"),
                     Util.safeJsonToString(jsonObject, "meter_id"),
                     Util.safeJsonToString(jsonObject, "meter_type"),
