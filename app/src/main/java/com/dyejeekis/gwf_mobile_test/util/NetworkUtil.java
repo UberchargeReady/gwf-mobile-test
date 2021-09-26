@@ -18,10 +18,10 @@ public class NetworkUtil {
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(new LoggingInterceptor())
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
-            .callTimeout(20, TimeUnit.SECONDS)
+            //.connectTimeout(20, TimeUnit.SECONDS)
+            //.readTimeout(20, TimeUnit.SECONDS)
+            //.writeTimeout(20, TimeUnit.SECONDS)
+            //.callTimeout(20, TimeUnit.SECONDS)
             .build();
 
     public static String get(String url, String bearerToken) throws IOException {

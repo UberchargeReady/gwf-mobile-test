@@ -1,5 +1,7 @@
 package com.dyejeekis.gwf_mobile_test.ui.auth;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -28,7 +30,7 @@ public class AuthViewModel extends BaseViewModel {
     public MutableLiveData<User> getUserMutable() {
         if (userMutable == null) {
             userMutable = new MutableLiveData<>();
-            userMutable.postValue(MyApp.getInstance().getCurrentUser());
+            userMutable.postValue(getUser());
         }
         return userMutable;
     }

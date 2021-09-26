@@ -1,7 +1,6 @@
 package com.dyejeekis.gwf_mobile_test.ui.meters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -21,9 +20,9 @@ public class MetersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static final int VIEW_TYPE_TOTALS = 1;
 
     private List<Entity> items;
-    private View.OnClickListener meterListener;
+    private MeterListener meterListener;
 
-    public MetersAdapter(List<Entity> items, View.OnClickListener meterListener) {
+    public MetersAdapter(List<Entity> items, MeterListener meterListener) {
         this.items = items;
         this.meterListener = meterListener;
     }

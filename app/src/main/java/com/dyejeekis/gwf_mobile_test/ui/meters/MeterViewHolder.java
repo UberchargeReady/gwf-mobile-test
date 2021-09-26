@@ -17,8 +17,8 @@ public class MeterViewHolder extends RecyclerView.ViewHolder {
         this.binding = binding;
     }
 
-    public void bindItem(Meter meter, View.OnClickListener listener) {
-        binding.layoutMeter.setOnClickListener(listener);
+    public void bindItem(Meter meter, MeterListener listener) {
+        binding.layoutMeter.setOnClickListener(listener.onMeterClick(meter));
         binding.textViewName.setText("Name: " + meter.getName());
         binding.textViewId.setText("ID: " + meter.getId());
         binding.textViewType.setText("Type: " + meter.getType());
