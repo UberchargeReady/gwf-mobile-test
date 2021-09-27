@@ -35,7 +35,7 @@ public class MetersViewModel extends BaseViewModel {
         return mutableLiveData;
     }
 
-    public void loadData(ApiCallback<Response> callback) {
+    public void loadData(ApiCallback<MeterResponse> callback) {
         if (getUser().isLoggedIn()) {
             getExecutor().execute(() -> {
                 Result<MeterResponse> meterResult = apiHelper.getMeters(new MeterRequest());
@@ -48,7 +48,7 @@ public class MetersViewModel extends BaseViewModel {
                     items.addAll(((Result.Success<MeterResponse>) meterResult).data.getMeters());
                     mutableLiveData.postValue(items);
                 } else mutableLiveData.postValue(null);
-                if (callback != null) callback.onComplete(null);
+                if (callback != null) callback.onComplete(meterResult);
             });
             //getExecutor().execute(() -> {
             //    try {

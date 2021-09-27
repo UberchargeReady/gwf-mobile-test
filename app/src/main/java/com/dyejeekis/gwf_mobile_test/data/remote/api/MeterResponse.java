@@ -12,11 +12,12 @@ import org.json.JSONTokener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeterResponse extends Response {
+public class MeterResponse extends DataResponse {
 
     private final List<Meter> meters = new ArrayList<>();
 
     public MeterResponse(String json) throws JSONException {
+        super(json);
         parseResponse(json);
     }
 

@@ -69,7 +69,15 @@ public class NetworkUtil {
         }
     }
 
+    public static class AccessTokenExpiredException extends RuntimeException {
+
+    }
+
     public static class RefreshTokenExpiredException extends RuntimeException {
+
+    }
+
+    public static class IncorrectCredentialsException extends RuntimeException {
 
     }
 

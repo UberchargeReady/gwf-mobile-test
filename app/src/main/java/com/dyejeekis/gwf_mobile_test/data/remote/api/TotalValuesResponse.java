@@ -6,11 +6,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-public class TotalValuesResponse extends Response {
+public class TotalValuesResponse extends DataResponse {
 
     private TotalValues totalValues;
 
     public TotalValuesResponse(String json) throws JSONException {
+        super(json);
         parseResponse(json);
     }
 

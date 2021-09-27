@@ -40,8 +40,8 @@ public class MyApp extends Application {
         if (currentUser == null) {
             try {
                 currentUser = (User) Util.readObjectFromFile(new File(getFilesDir(), USER_FILE_NAME));
-                if (!currentUser.isRefreshTokenValid())
-                    currentUser = new User();
+//                if (!currentUser.isRefreshTokenValid())
+//                    currentUser = new User();
             } catch (IOException | ClassNotFoundException e) {
                 currentUser = new User();
             }

@@ -1,11 +1,8 @@
 package com.dyejeekis.gwf_mobile_test.ui.auth;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.dyejeekis.gwf_mobile_test.MyApp;
 import com.dyejeekis.gwf_mobile_test.data.model.User;
 import com.dyejeekis.gwf_mobile_test.data.remote.ApiCallback;
 import com.dyejeekis.gwf_mobile_test.data.remote.ApiHelper;
@@ -53,23 +50,19 @@ public class AuthViewModel extends BaseViewModel {
 
     public void makeRefreshRequest(ApiCallback<RefreshResponse> callback) {
         if (getUser().isLoggedIn()) {
-            if (getUser().isRefreshTokenValid()) {
-                RefreshRequest request = new RefreshRequest(getUser().getRefreshToken());
-                getExecutor().execute(() -> {
-                    Result<RefreshResponse> result = apiHelper.postRefresh(request);
-                    if (result instanceof Result.Success) {
-                        String accessToken = ((Result.Success<RefreshResponse>) result)
-                                .data.getAccessToken();
-                        User user = getUser();
-                        user.setAccessToken(accessToken);
-                        saveUser(user);
-                        userMutable.postValue(user);
-                    }
-                    callback.onComplete(result);
-                });
-            } else {
-                throw new NetworkUtil.RefreshTokenExpiredException();
-            }
+            RefreshRequest request = new RefreshRequest(getUser().getRefreshToken());
+            getExecutor().execute(() -> {
+                Result<RefreshResponse> result = apiHelper.postRefresh(request);
+                if (result instanceof Result.Success) {
+                    String accessToken = ((Result.Success<RefreshResponse>) result)
+                            .data.getAccessToken();
+                    User user = getUser();
+                    user.setAccessToken(accessToken);
+                    saveUser(user);
+                    userMutable.postValue(user);
+                }
+                callback.onComplete(result);
+            });
         } else throw new NetworkUtil.NotAuthenticatedException();
     }
 

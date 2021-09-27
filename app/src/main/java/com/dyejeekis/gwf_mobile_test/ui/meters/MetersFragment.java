@@ -28,6 +28,7 @@ import com.dyejeekis.gwf_mobile_test.data.model.User;
 import com.dyejeekis.gwf_mobile_test.data.remote.ApiCallback;
 import com.dyejeekis.gwf_mobile_test.data.remote.AppApiCallback;
 import com.dyejeekis.gwf_mobile_test.data.remote.Result;
+import com.dyejeekis.gwf_mobile_test.data.remote.api.MeterResponse;
 import com.dyejeekis.gwf_mobile_test.data.remote.api.Response;
 import com.dyejeekis.gwf_mobile_test.databinding.FragmentMetersBinding;
 import com.dyejeekis.gwf_mobile_test.ui.auth.AuthViewModel;
@@ -41,7 +42,7 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
     private AuthViewModel authViewModel;
     private MetersViewModel metersViewModel;
     private FragmentMetersBinding binding;
-    private ApiCallback<Response> loadDataCb;
+    private ApiCallback<MeterResponse> loadDataCb;
     private MetersAdapter adapter;
 
     @Override
@@ -87,27 +88,53 @@ public class MetersFragment extends Fragment implements MeterListener, SwipeRefr
     private void refreshData(User user) {
         if (user.isLoggedIn()) {
             binding.swipeRefresh.setRefreshing(true);
-            if (user.isAccessTokenValid()) {
-                metersViewModel.loadData(loadDataCb);
-            } else {
-                try {
-                    authViewModel.makeRefreshRequest(new AppApiCallback<>(getContext(), result -> {
-                        if (result instanceof Result.Success) {
-                            metersViewModel.loadData(loadDataCb);
-                        } else {
-                            binding.swipeRefresh.setRefreshing(false);
-                            Util.displayShortToast(getContext(),
-                                    "Failed to refresh access token");
-                        }
-                    }));
-                } catch (NetworkUtil.RefreshTokenExpiredException e) {
-                    authViewModel.makeLogoutRequest(new AppApiCallback<>(getContext(), result -> {
-                        binding.swipeRefresh.setRefreshing(false);
-                        Util.displayShortToast(getContext(),
-                                "Refresh token expired - Please log in");
-                    }));
+            metersViewModel.loadData(new AppApiCallback<>(getContext(), result -> {
+                if (result instanceof Result.Error) {
+                    Exception e = ((Result.Error) result).exception;
+                    if (e instanceof NetworkUtil.AccessTokenExpiredException) {
+                        authViewModel.makeRefreshRequest(new AppApiCallback<>(getContext(),
+                                refreshResult -> {
+                                    if (refreshResult instanceof Result.Success) {
+                                        metersViewModel.loadData(loadDataCb);
+                                    } else {
+                                        binding.swipeRefresh.setRefreshing(false);
+                                        Util.displayShortToast(getContext(),
+                                                "Failed to refresh access token");
+                                    }
+                                }));
+                    } else if (e instanceof NetworkUtil.RefreshTokenExpiredException) {
+                        authViewModel.makeLogoutRequest(new AppApiCallback<>(getContext(),
+                                logoutResult -> {
+                                    binding.swipeRefresh.setRefreshing(false);
+                                    Util.displayShortToast(getContext(),
+                                            "Refresh token expired - Please log in");
+                                }));
+                    }
+                } else {
+                    binding.swipeRefresh.setRefreshing(false);
                 }
-            }
+            }));
+            //if (user.isAccessTokenValid()) {
+            //    metersViewModel.loadData(loadDataCb);
+            //} else {
+            //    try {
+            //        authViewModel.makeRefreshRequest(new AppApiCallback<>(getContext(), result -> {
+            //            if (result instanceof Result.Success) {
+            //                metersViewModel.loadData(loadDataCb);
+            //            } else {
+            //                binding.swipeRefresh.setRefreshing(false);
+            //                Util.displayShortToast(getContext(),
+            //                        "Failed to refresh access token");
+            //            }
+            //        }));
+            //    } catch (NetworkUtil.RefreshTokenExpiredException e) {
+            //        authViewModel.makeLogoutRequest(new AppApiCallback<>(getContext(), result -> {
+            //            binding.swipeRefresh.setRefreshing(false);
+            //            Util.displayShortToast(getContext(),
+            //                    "Refresh token expired - Please log in");
+            //        }));
+            //    }
+            //}
         } else {
             binding.swipeRefresh.setRefreshing(false);
             //Util.displayShortToast(getContext(), "Please log in");
